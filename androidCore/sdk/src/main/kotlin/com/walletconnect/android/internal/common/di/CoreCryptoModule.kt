@@ -3,8 +3,6 @@ package com.walletconnect.android.internal.common.di
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.walletconnect.android.internal.common.crypto.codec.ChaChaPolyCodec
 import com.walletconnect.android.internal.common.crypto.codec.Codec
 import com.walletconnect.android.internal.common.crypto.kmr.BouncyCastleKeyManagementRepository
@@ -30,17 +28,7 @@ internal fun coreCryptoModule() = module {
 
     @Synchronized
     fun Scope.createSharedPreferences(): SharedPreferences {
-        val masterKey = MasterKey.Builder(androidContext(), KEY_STORE_ALIAS)
-            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-            .build()
-
-        return EncryptedSharedPreferences.create(
-            androidContext(),
-            SHARED_PREFS_FILE,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
-        )
+        return androidContext().getSharedPreferences(SHARED_PREFS_FILE, Context.MODE_PRIVATE)
     }
 
     @Synchronized

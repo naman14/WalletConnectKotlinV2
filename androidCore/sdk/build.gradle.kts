@@ -64,7 +64,7 @@ dependencies {
     scarletAndroid()
     sqlDelightAndroid()
     sqlCipher()
-    security()
+//    security()
     koinAndroid()
     timber()
     moshiKsp()
