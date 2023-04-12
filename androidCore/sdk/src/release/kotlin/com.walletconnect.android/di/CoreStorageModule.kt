@@ -7,8 +7,6 @@ import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import com.walletconnect.android.internal.common.di.*
@@ -47,17 +45,7 @@ private val keyGenParameterSpec: KeyGenParameterSpec =
 
 @Synchronized
 private fun Scope.createSharedPreferences(): SharedPreferences {
-    val masterKey = MasterKey.Builder(androidContext(), KEYSTORE_ALIAS)
-        .setKeyGenParameterSpec(keyGenParameterSpec)
-        .build()
-
-    return EncryptedSharedPreferences.create(
-        androidContext(),
-        SHARED_PREFS_FILENAME,
-        masterKey,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    return androidContext().getSharedPreferences(SHARED_PREFS_FILENAME, Context.MODE_PRIVATE)
 }
 
 @Synchronized
